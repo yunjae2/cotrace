@@ -1,10 +1,10 @@
 all: program trace
 
-program: program.c libtrace.so
-	gcc -no-pie -finstrument-functions -Wl,-rpath,. -o program program.c -L. -ltrace
+program: program.c libctxtrace.so
+	gcc -no-pie -finstrument-functions -Wl,-rpath,. -o program program.c -L. -lctxtrace
 
-libtrace.so: trace.c trace.h
-	gcc -shared -fPIC trace.c -o libtrace.so
+libctxtrace.so: ctxtrace.c ctxtrace.h
+	gcc -shared -fPIC ctxtrace.c -o libctxtrace.so
 
 run: program
 	./program

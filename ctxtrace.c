@@ -1,4 +1,4 @@
-#include "trace.h"
+#include "ctxtrace.h"
 
 void flush_trace_buf(void)
 {

@@ -1,5 +1,5 @@
-#ifndef _TRACE_H
-#define _TRACE_H
+#ifndef _CTXTRACE_H
+#define _CTXTRACE_H
 
 #include <stdio.h>
 #include <time.h>

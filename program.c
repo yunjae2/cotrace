@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "trace.h"
+#include "ctxtrace.h"
 
 void baz(int level)
 {
