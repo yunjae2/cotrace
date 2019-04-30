@@ -4,6 +4,11 @@
 #include <time.h>
 
 #define S_IN_NS			1000000000
+#define GETRES(res, ts)	{\
+	clock_getres(CLOCK_REALTIME, &ts);\
+	res = ((unsigned long)(ts.tv_sec) * S_IN_NS +\
+			(unsigned long)ts.tv_nsec);\
+}
 #define GETTIME(time, ts)	{\
 	clock_gettime(CLOCK_REALTIME, &ts);\
 	time = ((unsigned long)(ts.tv_sec) * S_IN_NS +\
@@ -46,11 +51,15 @@ static FILE *fp_trace;
 void trace_begin(void)
 {
 	struct timespec ts;
+	unsigned long res;
 
 	nr_ctx = 0;
 	trace_depth = 0;
 
 	fp_trace = fopen("trace.out", "w");
+
+	GETRES(res, ts);
+	fprintf(fp_trace, "# Time res: %lu ns\n", res);
 	GETTIME(start_time, ts);
 }
 
