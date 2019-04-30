@@ -1,0 +1,8 @@
+# ignore extension-less files
+*
+!*.*
+!*/
+!*Makefile
+
+*.swp
+*.out
