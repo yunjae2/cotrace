@@ -10,4 +10,4 @@ run: program
 	./program
 
 clean:
-	rm -f *.o program
+	rm -f *.o *.so program
