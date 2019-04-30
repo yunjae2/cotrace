@@ -1,4 +1,4 @@
-program: program.c
+program: program.c trace.h
 	gcc -no-pie -finstrument-functions -o program program.c
 
 run: program
