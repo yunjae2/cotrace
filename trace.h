@@ -54,7 +54,7 @@ int curr_ctx;
 int trace_depth;
 struct trace_data trace_stack[MAX_TRACE_DEPTH];
 unsigned long start_time;
-static FILE *fp_trace;
+FILE *fp_trace;
 
 int buf_offset;
 struct trace_data trace_buf[MAX_BUF_OFFSET];
