@@ -6,5 +6,6 @@
 
 *.swp
 *.out
+*.data
 *.o
 *.so
