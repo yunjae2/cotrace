@@ -15,10 +15,11 @@ void trace_begin(void)
 	trace_depth = 0;
 	buf_offset = 0;
 
-	fp_trace = fopen("trace.out", "w");
-
 	GETRES(res, ts);
 	GETTIME(start_time, ts);
+
+	fp_trace = fopen("trace.out", "w");
+
 	printf("struct size: %ld\n", sizeof(struct trace_data));
 }
 
