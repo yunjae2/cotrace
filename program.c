@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 void baz(int level)
 {
@@ -10,7 +11,15 @@ void baz(int level)
 
 void bar(void)
 {
+	int *ptr;
+
 	baz(0);
+
+	ptr = (int *)malloc(10 * sizeof(int));
+	free(ptr);
+	ptr = (int *)calloc(20, sizeof(int));
+	ptr = (int *)realloc(ptr, 30 * sizeof(int));
+	free(ptr);
 }
 
 void foo(void)
