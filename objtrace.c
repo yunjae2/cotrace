@@ -17,8 +17,8 @@ void *malloc(size_t size)
 	struct timespec ts;
 	unsigned long time;
 
-	GETTIME(time, ts);
 	addr = malloc_fn(size);
+	GETTIME(time, ts);
 
 	OBJWRITE("[%10lu]\t obj %2d: %p (%zu)\n",
 			RELTIME(time), objid++, addr, size);
@@ -32,8 +32,8 @@ void *calloc(size_t nmemb, size_t size)
 	struct timespec ts;
 	unsigned long time;
 
-	GETTIME(time, ts);
 	addr = calloc_fn(nmemb, size);
+	GETTIME(time, ts);
 
 	OBJWRITE("[%10lu]\t obj %2d: %p (%zu)\n",
 			RELTIME(time), objid++, addr, nmemb * size);
@@ -45,14 +45,15 @@ void *realloc(void* ptr, size_t size)
 {
 	void *addr;
 	struct timespec ts;
-	unsigned long time;
+	unsigned long time_free, time_alloc;
 
-	GETTIME(time, ts);
+	GETTIME(time_free, ts);
 	addr = realloc_fn(ptr, size);
+	GETTIME(time_alloc, ts);
 
-	OBJWRITE("[%10lu]\t   free: %p\n", RELTIME(time), ptr);
+	OBJWRITE("[%10lu]\t   free: %p\n", RELTIME(time_free), ptr);
 	OBJWRITE("[%10lu]\t obj %2d: %p (%zu)\n",
-			RELTIME(time), objid++, addr, size);
+			RELTIME(time_alloc), objid++, addr, size);
 	return addr;
 }
 
