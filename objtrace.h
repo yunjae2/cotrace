@@ -13,8 +13,15 @@
 	}\
 }
 
+#define OBJ_PACK(pkg, _obj, _addr, _size, _time)	{\
+	pkg.obj = _obj;\
+	pkg.addr = _addr;\
+	pkg.size = _size;\
+	pkg.time = _time;\
+}
+
 struct obj_data {
-	int objid;
+	int obj;
 	unsigned long addr;
 	unsigned long size;
 	unsigned long time;
