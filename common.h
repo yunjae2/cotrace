@@ -17,4 +17,6 @@
 }
 #define RELTIME(time)		(time - start_time)
 
+unsigned long start_time;
+
 #endif
