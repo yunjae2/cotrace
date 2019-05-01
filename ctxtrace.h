@@ -15,10 +15,10 @@
 }
 #define TRACE_PUSH(data)	(trace_stack[trace_depth++] = data)
 #define TRACE_POP()		(trace_stack[--trace_depth])
-#define TRACE_WRITE(data)	{\
-	trace_buf[buf_offset++] = data;\
-	if (buf_offset >= MAX_BUF_OFFSET)\
-		flush_trace_buf();\
+#define TRACE_WRITE(buf, offset, data, fp)	{\
+	buf[offset++] = data;\
+	if (offset >= MAX_BUF_OFFSET)\
+		flush_trace_buf(buf, offset * sizeof(data), fp);\
 }
 
 
@@ -27,7 +27,8 @@ struct trace_data {
 	unsigned long time;
 };
 
-void flush_trace_buf(void) __attribute__ ((no_instrument_function));
+void flush_trace_buf(void *buf, size_t size, FILE *fp)
+	__attribute__ ((no_instrument_function));
 void trace_begin(void) __attribute__ ((constructor, no_instrument_function));
 void trace_end(void) __attribute__ ((destructor, no_instrument_function));
 void __cyg_profile_func_enter(void *this_fn, void *call_site)
