@@ -3,7 +3,7 @@
 
 #define _GNU_SOURCE
 #include <dlfcn.h>
-#include <stdio.h>
+#include "common.h"
 
 typedef void *(*malloc_t)(size_t size);
 typedef void *(*calloc_t)(size_t nmemb, size_t size);
