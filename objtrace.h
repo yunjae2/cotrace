@@ -13,6 +13,13 @@
 	}\
 }
 
+struct obj_data {
+	int objid;
+	unsigned long addr;
+	unsigned long size;
+	unsigned long time;
+};
+
 typedef void *(*malloc_t)(size_t size);
 typedef void *(*calloc_t)(size_t nmemb, size_t size);
 typedef void *(*realloc_t)(void *ptr, size_t size);
@@ -24,5 +31,8 @@ realloc_t realloc_fn;
 free_t free_fn;
 
 int objid;
+
+int obj_buf_offset;
+struct obj_data obj_buf[MAX_BUF_OFFSET];
 
 #endif
