@@ -4,7 +4,6 @@
 #include "common.h"
 
 #define MAX_TRACE_DEPTH		1000
-#define MAX_BUF_OFFSET		1000
 #define TRACE_PACK(pkg, _ctx, _time)	{\
 	pkg.ctx = _ctx;\
 	pkg.time = _time;\

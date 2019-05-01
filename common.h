@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <time.h>
 
+/* Macros for measuring time */
 #define S_IN_NS			1000000000
 #define GETRES(res, ts)	{\
 	clock_getres(CLOCK_REALTIME, &ts);\
@@ -17,6 +18,8 @@
 }
 #define RELTIME(time)		(time - start_time)
 
+/* Macros for write buffer */
+#define MAX_BUF_OFFSET		1000
 #define TRACE_WRITE(buf, offset, data, fp)	{\
 	buf[offset++] = data;\
 	if (offset >= MAX_BUF_OFFSET)\
