@@ -3,8 +3,8 @@
 void ctxtrace_init(void)
 {
 	nr_ctx = 0;
-	trace_depth = 0;
-	buf_offset = 0;
+	ctx_depth = 0;
+	ctx_buf_offset = 0;
 	fp_ctx = fopen("ctx.data", "w");
 }
 
@@ -24,9 +24,9 @@ void trace_begin(void)
 
 void trace_end(void)
 {
-	if (buf_offset)
-		flush_trace_buf(trace_buf, sizeof(struct trace_data),
-				&buf_offset, fp_ctx);
+	if (ctx_buf_offset)
+		flush_trace_buf(ctx_buf, sizeof(struct ctx_data),
+				&ctx_buf_offset, fp_ctx);
 
 	disable_objtrace = 1;
 	fclose(fp_ctx);
@@ -37,14 +37,14 @@ void __cyg_profile_func_enter(void *this_fn, void *call_site)
 {
 	struct timespec ts;
 	unsigned long time;
-	struct trace_data tdata;
+	struct ctx_data cdata;
 
 	curr_ctx = nr_ctx++;
 	GETTIME(time, ts);
 
-	TRACE_PACK(tdata, curr_ctx, RELTIME(time));
-	TRACE_WRITE(trace_buf, buf_offset, tdata, fp_ctx);
-	TRACE_PUSH(tdata);
+	TRACE_PACK(cdata, curr_ctx, RELTIME(time));
+	TRACE_WRITE(ctx_buf, ctx_buf_offset, cdata, fp_ctx);
+	TRACE_PUSH(cdata);
 }
 
 void __cyg_profile_func_exit(void *this_fn, void *call_site)
@@ -52,12 +52,12 @@ void __cyg_profile_func_exit(void *this_fn, void *call_site)
 	struct timespec ts;
 	unsigned long ctx_start_time;
 	unsigned long ctx_end_time;
-	struct trace_data tdata;
+	struct ctx_data cdata;
 
-	tdata = TRACE_POP();
-	TRACE_UNPACK(tdata, curr_ctx, ctx_start_time);
+	cdata = TRACE_POP();
+	TRACE_UNPACK(cdata, curr_ctx, ctx_start_time);
 
 	GETTIME(ctx_end_time, ts);
-	TRACE_PACK(tdata, curr_ctx, RELTIME(ctx_end_time));
-	TRACE_WRITE(trace_buf, buf_offset, tdata, fp_ctx);
+	TRACE_PACK(cdata, curr_ctx, RELTIME(ctx_end_time));
+	TRACE_WRITE(ctx_buf, ctx_buf_offset, cdata, fp_ctx);
 }

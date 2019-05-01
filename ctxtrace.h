@@ -12,10 +12,10 @@
 	_ctx = pkg.ctx;\
 	_time = pkg.time;\
 }
-#define TRACE_PUSH(data)	(trace_stack[trace_depth++] = data)
-#define TRACE_POP()		(trace_stack[--trace_depth])
+#define TRACE_PUSH(data)	(ctx_stack[ctx_depth++] = data)
+#define TRACE_POP()		(ctx_stack[--ctx_depth])
 
-struct trace_data {
+struct ctx_data {
 	int ctx;
 	unsigned long time;
 };
@@ -29,10 +29,10 @@ void __cyg_profile_func_exit(void *this_fn, void *call_site)
 
 int nr_ctx;
 int curr_ctx;
-int trace_depth;
-struct trace_data trace_stack[MAX_TRACE_DEPTH];
+int ctx_depth;
+struct ctx_data ctx_stack[MAX_TRACE_DEPTH];
 
-int buf_offset;
-struct trace_data trace_buf[MAX_BUF_OFFSET];
+int ctx_buf_offset;
+struct ctx_data ctx_buf[MAX_BUF_OFFSET];
 
 #endif
