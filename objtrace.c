@@ -7,6 +7,8 @@ void objtrace_init(void)
 	realloc_fn = (realloc_t)dlsym(RTLD_NEXT, "realloc");
 	free_fn = (free_t)dlsym(RTLD_NEXT, "free");
 	fp_obj = fopen("obj.data", "w");
+
+	objid = 0;
 }
 
 void *malloc(size_t size)
@@ -18,7 +20,9 @@ void *malloc(size_t size)
 	GETTIME(time, ts);
 	addr = malloc_fn(size);
 
-	OBJWRITE("[%10lu]\t malloc: %p (%zu)\n", RELTIME(time), addr, size);
+	OBJWRITE("[%10lu]\t obj %2d: %p (%zu)\n",
+			RELTIME(time), objid++, addr, size);
+
 	return addr;
 }
 
@@ -31,8 +35,9 @@ void *calloc(size_t nmemb, size_t size)
 	GETTIME(time, ts);
 	addr = calloc_fn(nmemb, size);
 
-	OBJWRITE("[%10lu]\t calloc: %p (%zu x %zu)\n",
-			RELTIME(time), addr, nmemb, size);
+	OBJWRITE("[%10lu]\t obj %2d: %p (%zu)\n",
+			RELTIME(time), objid++, addr, nmemb * size);
+
 	return addr;
 }
 
@@ -45,8 +50,9 @@ void *realloc(void* ptr, size_t size)
 	GETTIME(time, ts);
 	addr = realloc_fn(ptr, size);
 
-	OBJWRITE("[%10lu]\trealloc: %p -> %p (%zu)\n",
-			RELTIME(time), ptr, addr, size);
+	OBJWRITE("[%10lu]\t   free: %p\n", RELTIME(time), ptr);
+	OBJWRITE("[%10lu]\t obj %2d: %p (%zu)\n",
+			RELTIME(time), objid++, addr, size);
 	return addr;
 }
 

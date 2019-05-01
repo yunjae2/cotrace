@@ -23,4 +23,6 @@ calloc_t calloc_fn;
 realloc_t realloc_fn;
 free_t free_fn;
 
+int objid;
+
 #endif
