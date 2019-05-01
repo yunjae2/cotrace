@@ -6,10 +6,10 @@ program: program.c libcotrace.so
 libcotrace.so: ctxtrace.o objtrace.o
 	gcc -shared -fPIC -o libcotrace.so ctxtrace.o objtrace.o -ldl
 
-ctxtrace.o: ctxtrace.c ctxtrace.h
+ctxtrace.o: ctxtrace.c ctxtrace.h common.h
 	gcc -c -fPIC -o ctxtrace.o ctxtrace.c
 
-objtrace.o: objtrace.c objtrace.h
+objtrace.o: objtrace.c objtrace.h common.h
 	gcc -c -fPIC -o objtrace.o objtrace.c
 
 run: program
