@@ -2,19 +2,20 @@
 
 void objtrace_init(void)
 {
+	malloc_fn = (malloc_t)dlsym(RTLD_NEXT, "malloc");
+	calloc_fn = (calloc_t)dlsym(RTLD_NEXT, "calloc");
+	realloc_fn = (realloc_t)dlsym(RTLD_NEXT, "realloc");
+	free_fn = (free_t)dlsym(RTLD_NEXT, "free");
 	fp_obj = fopen("obj.data", "w");
 }
 
 void *malloc(size_t size)
 {
-	malloc_t malloc_fn;
 	void *addr;
 	struct timespec ts;
 	unsigned long time;
 
 	GETTIME(time, ts);
-
-	malloc_fn = (malloc_t)dlsym(RTLD_NEXT, "malloc");
 	addr = malloc_fn(size);
 
 	if (!disable_objtrace) {
@@ -28,14 +29,11 @@ void *malloc(size_t size)
 
 void *calloc(size_t nmemb, size_t size)
 {
-	calloc_t calloc_fn;
 	void *addr;
 	struct timespec ts;
 	unsigned long time;
 
 	GETTIME(time, ts);
-
-	calloc_fn = (calloc_t)dlsym(RTLD_NEXT, "calloc");
 	addr = calloc_fn(nmemb, size);
 
 	if (!disable_objtrace) {
@@ -49,14 +47,11 @@ void *calloc(size_t nmemb, size_t size)
 
 void *realloc(void* ptr, size_t size)
 {
-	realloc_t realloc_fn;
 	void *addr;
 	struct timespec ts;
 	unsigned long time;
 
 	GETTIME(time, ts);
-
-	realloc_fn = (realloc_t)dlsym(RTLD_NEXT, "realloc");
 	addr = realloc_fn(ptr, size);
 
 	if (!disable_objtrace) {
@@ -70,13 +65,10 @@ void *realloc(void* ptr, size_t size)
 
 void free(void *ptr)
 {
-	free_t free_fn;
 	struct timespec ts;
 	unsigned long time;
 
 	GETTIME(time, ts);
-
-	free_fn = (free_t)dlsym(RTLD_NEXT, "free");
 	free_fn(ptr);
 
 	if (!disable_objtrace) {

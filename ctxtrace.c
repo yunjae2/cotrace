@@ -25,8 +25,8 @@ void trace_begin(void)
 	GETTIME(start_time, ts);
 
 	disable_objtrace = 1;
-	ctxtrace_init();
 	objtrace_init();
+	ctxtrace_init();
 	disable_objtrace = 0;
 }
 
