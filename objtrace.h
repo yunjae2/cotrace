@@ -5,6 +5,14 @@
 #include <dlfcn.h>
 #include "common.h"
 
+#define OBJWRITE(...) {\
+	if (!disable_objtrace) {\
+		disable_objtrace = 1;\
+		fprintf(fp_obj, __VA_ARGS__);\
+		disable_objtrace = 0;\
+	}\
+}
+
 typedef void *(*malloc_t)(size_t size);
 typedef void *(*calloc_t)(size_t nmemb, size_t size);
 typedef void *(*realloc_t)(void *ptr, size_t size);

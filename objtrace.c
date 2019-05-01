@@ -18,12 +18,7 @@ void *malloc(size_t size)
 	GETTIME(time, ts);
 	addr = malloc_fn(size);
 
-	if (!disable_objtrace) {
-		disable_objtrace = 1;
-		fprintf(fp_obj, "[%10lu]\t malloc: %p (%zu)\n",
-				RELTIME(time), addr, size);
-		disable_objtrace = 0;
-	}
+	OBJWRITE("[%10lu]\t malloc: %p (%zu)\n", RELTIME(time), addr, size);
 	return addr;
 }
 
@@ -36,12 +31,8 @@ void *calloc(size_t nmemb, size_t size)
 	GETTIME(time, ts);
 	addr = calloc_fn(nmemb, size);
 
-	if (!disable_objtrace) {
-		disable_objtrace = 1;
-		fprintf(fp_obj, "[%10lu]\t calloc: %p (%zu x %zu)\n",
-				RELTIME(time), addr, nmemb, size);
-		disable_objtrace = 0;
-	}
+	OBJWRITE("[%10lu]\t calloc: %p (%zu x %zu)\n",
+			RELTIME(time), addr, nmemb, size);
 	return addr;
 }
 
@@ -54,12 +45,8 @@ void *realloc(void* ptr, size_t size)
 	GETTIME(time, ts);
 	addr = realloc_fn(ptr, size);
 
-	if (!disable_objtrace) {
-		disable_objtrace = 1;
-		fprintf(fp_obj, "[%10lu]\trealloc: %p -> %p (%zu)\n",
-				RELTIME(time), ptr, addr, size);
-		disable_objtrace = 0;
-	}
+	OBJWRITE("[%10lu]\trealloc: %p -> %p (%zu)\n",
+			RELTIME(time), ptr, addr, size);
 	return addr;
 }
 
@@ -71,10 +58,6 @@ void free(void *ptr)
 	GETTIME(time, ts);
 	free_fn(ptr);
 
-	if (!disable_objtrace) {
-		disable_objtrace = 1;
-		fprintf(fp_obj, "[%10lu]\t   free: %p\n", RELTIME(time), ptr);
-		disable_objtrace = 0;
-	}
+	OBJWRITE("[%10lu]\t   free: %p\n", RELTIME(time), ptr);
 	return;
 }
