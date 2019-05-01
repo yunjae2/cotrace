@@ -8,14 +8,6 @@ void ctxtrace_init(void)
 	fp_ctx = fopen("ctx.data", "w");
 }
 
-void flush_trace_buf(void *buf, size_t size, FILE *fp)
-{
-	disable_objtrace = 1;
-	fwrite(buf, size, 1, fp);
-	buf_offset = 0;
-	disable_objtrace = 0;
-}
-
 void trace_begin(void)
 {
 	struct timespec ts;
@@ -33,9 +25,8 @@ void trace_begin(void)
 void trace_end(void)
 {
 	if (buf_offset)
-		flush_trace_buf(trace_buf,
-				buf_offset * sizeof(struct trace_data),
-				fp_ctx);
+		flush_trace_buf(trace_buf, sizeof(struct trace_data),
+				&buf_offset, fp_ctx);
 
 	disable_objtrace = 1;
 	fclose(fp_ctx);

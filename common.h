@@ -17,6 +17,13 @@
 }
 #define RELTIME(time)		(time - start_time)
 
+#define TRACE_WRITE(buf, offset, data, fp)	{\
+	buf[offset++] = data;\
+	if (offset >= MAX_BUF_OFFSET)\
+		flush_trace_buf(buf, sizeof(data), &offset, fp);\
+}
+
+void flush_trace_buf(void *buf, size_t size, int *offset, FILE *fp);
 void objtrace_init(void);
 
 int disable_objtrace;
