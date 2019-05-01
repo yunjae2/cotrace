@@ -1,5 +1,13 @@
 #include "ctxtrace.h"
 
+void ctxtrace_init(void)
+{
+	nr_ctx = 0;
+	trace_depth = 0;
+	buf_offset = 0;
+	fp_ctx = fopen("ctx.data", "w");
+}
+
 void flush_trace_buf(void)
 {
 	disable_objtrace = 1;
@@ -13,16 +21,12 @@ void trace_begin(void)
 	struct timespec ts;
 	unsigned long res;
 
-	nr_ctx = 0;
-	trace_depth = 0;
-	buf_offset = 0;
-
 	GETRES(res, ts);
 	GETTIME(start_time, ts);
 
 	disable_objtrace = 1;
-	fp_ctx = fopen("ctx.data", "w");
-	fp_obj = fopen("obj.data", "w");
+	ctxtrace_init();
+	objtrace_init();
 	disable_objtrace = 0;
 }
 

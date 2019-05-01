@@ -17,6 +17,8 @@
 }
 #define RELTIME(time)		(time - start_time)
 
+void objtrace_init(void);
+
 int disable_objtrace;
 FILE *fp_ctx, *fp_obj;
 

@@ -1,5 +1,10 @@
 #include "objtrace.h"
 
+void objtrace_init(void)
+{
+	fp_obj = fopen("obj.data", "w");
+}
+
 void *malloc(size_t size)
 {
 	malloc_t malloc_fn;
