@@ -17,6 +17,9 @@
 }
 #define RELTIME(time)		(time - start_time)
 
+int disable_objtrace;
+FILE *fp_ctx, *fp_obj;
+
 unsigned long start_time;
 
 #endif

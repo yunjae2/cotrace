@@ -2,8 +2,10 @@
 
 void flush_trace_buf(void)
 {
-	fwrite(trace_buf, sizeof(struct trace_data) * buf_offset, 1, fp_trace);
+	disable_objtrace = 1;
+	fwrite(trace_buf, sizeof(struct trace_data) * buf_offset, 1, fp_ctx);
 	buf_offset = 0;
+	disable_objtrace = 0;
 }
 
 void trace_begin(void)
@@ -18,7 +20,10 @@ void trace_begin(void)
 	GETRES(res, ts);
 	GETTIME(start_time, ts);
 
-	fp_trace = fopen("trace.out", "w");
+	disable_objtrace = 1;
+	fp_ctx = fopen("ctx.data", "w");
+	fp_obj = fopen("obj.data", "w");
+	disable_objtrace = 0;
 }
 
 void trace_end(void)
@@ -26,8 +31,9 @@ void trace_end(void)
 	if (buf_offset)
 		flush_trace_buf();
 
-	if (fp_trace)
-		fclose(fp_trace);
+	disable_objtrace = 1;
+	fclose(fp_ctx);
+	fclose(fp_obj);
 }
 
 void __cyg_profile_func_enter(void *this_fn, void *call_site)
