@@ -19,8 +19,6 @@ void trace_begin(void)
 	GETTIME(start_time, ts);
 
 	fp_trace = fopen("trace.out", "w");
-
-	printf("struct size: %ld\n", sizeof(struct trace_data));
 }
 
 void trace_end(void)
