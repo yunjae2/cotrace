@@ -53,8 +53,8 @@ void *calloc(size_t nmemb, size_t size)
 		return addr;
 
 	GETTIME(time, ts);
-	OBJ_PACK(odata, objid++, (unsigned long) addr, (unsigned long) size,
-			RELTIME(time));
+	OBJ_PACK(odata, objid++, (unsigned long) addr,
+			(unsigned long) (nmemb * size), RELTIME(time));
 	TRACE_WRITE(obj_buf, obj_buf_offset, odata, fp_obj);
 
 	return addr;
