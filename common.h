@@ -26,11 +26,12 @@
 		flush_trace_buf(buf, sizeof(data), &offset, fp);\
 }
 
-void flush_trace_buf(void *buf, size_t size, int *offset, FILE *fp);
-void objtrace_init(void);
-void objtrace_term(void);
-void ctxtrace_init(void);
-void ctxtrace_term(void);
+void flush_trace_buf(void *buf, size_t size, int *offset, FILE *fp)
+	__attribute__ ((no_instrument_function));
+void objtrace_init(void) __attribute__ ((no_instrument_function));
+void objtrace_term(void) __attribute__ ((no_instrument_function));
+void ctxtrace_init(void) __attribute__ ((no_instrument_function));
+void ctxtrace_term(void) __attribute__ ((no_instrument_function));
 
 int disable_objtrace;
 FILE *fp_ctx, *fp_obj;
