@@ -5,14 +5,6 @@
 #include <dlfcn.h>
 #include "common.h"
 
-#define OBJWRITE(...) {\
-	if (!disable_objtrace) {\
-		disable_objtrace = 1;\
-		fprintf(fp_obj, __VA_ARGS__);\
-		disable_objtrace = 0;\
-	}\
-}
-
 #define OBJ_PACK(pkg, _obj, _addr, _size, _time)	{\
 	pkg.obj = _obj;\
 	pkg.addr = _addr;\
