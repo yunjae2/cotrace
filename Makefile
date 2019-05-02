@@ -19,4 +19,4 @@ run: program
 	./program
 
 clean:
-	rm -f *.o *.so program
+	rm -f *.o *.so *.data program
