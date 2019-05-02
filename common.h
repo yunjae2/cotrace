@@ -28,6 +28,9 @@
 
 void flush_trace_buf(void *buf, size_t size, int *offset, FILE *fp);
 void objtrace_init(void);
+void objtrace_term(void);
+void ctxtrace_init(void);
+void ctxtrace_term(void);
 
 int disable_objtrace;
 FILE *fp_ctx, *fp_obj;

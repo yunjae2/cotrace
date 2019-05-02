@@ -11,6 +11,12 @@ void objtrace_init(void)
 	objid = 0;
 }
 
+void objtrace_term(void)
+{
+	disable_objtrace = 1;
+	fclose(fp_obj);
+}
+
 void *malloc(size_t size)
 {
 	void *addr;

@@ -8,6 +8,16 @@ void ctxtrace_init(void)
 	fp_ctx = fopen("ctx.data", "w");
 }
 
+void ctxtrace_term(void)
+{
+	if (ctx_buf_offset)
+		flush_trace_buf(ctx_buf, sizeof(struct ctx_data),
+				&ctx_buf_offset, fp_ctx);
+	disable_objtrace = 1;
+	fclose(fp_ctx);
+	disable_objtrace = 0;
+}
+
 void trace_begin(void)
 {
 	struct timespec ts;
@@ -24,13 +34,8 @@ void trace_begin(void)
 
 void trace_end(void)
 {
-	if (ctx_buf_offset)
-		flush_trace_buf(ctx_buf, sizeof(struct ctx_data),
-				&ctx_buf_offset, fp_ctx);
-
-	disable_objtrace = 1;
-	fclose(fp_ctx);
-	fclose(fp_obj);
+	ctxtrace_term();
+	objtrace_term();
 }
 
 void __cyg_profile_func_enter(void *this_fn, void *call_site)
