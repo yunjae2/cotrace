@@ -23,10 +23,10 @@ void trace_begin(void)
 	struct timespec ts;
 	unsigned long res;
 
+	disable_objtrace = 1;
 	GETRES(res, ts);
 	GETTIME(start_time, ts);
 
-	disable_objtrace = 1;
 	objtrace_init();
 	ctxtrace_init();
 	disable_objtrace = 0;
