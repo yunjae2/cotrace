@@ -13,6 +13,9 @@ void objtrace_init(void)
 
 void objtrace_term(void)
 {
+	if (obj_buf_offset)
+		flush_trace_buf(obj_buf, sizeof(struct obj_data),
+				&obj_buf_offset, fp_obj);
 	disable_objtrace = 1;
 	fclose(fp_obj);
 }
