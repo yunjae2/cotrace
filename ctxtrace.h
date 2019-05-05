@@ -3,7 +3,7 @@
 
 #include "common.h"
 
-#define CTX_MIN_RUNTIME		100	// In nanoseconds
+#define CTX_MIN_RUNTIME		4 * 1000 * 1000	// In nanoseconds
 #define MAX_TRACE_DEPTH		1000
 #define TRACE_PUSH(data)	(ctx_stack[curr_ctx.depth] = data)
 #define TRACE_POP()		(ctx_stack[curr_ctx.depth - 1])
