@@ -34,7 +34,7 @@ void *malloc(size_t size)
 
 	GETTIME(time, ts);
 	OBJ_PACK(odata, objid++, (unsigned long) addr, (unsigned long) size,
-			RELTIME(time));
+			RELTIME(time), curr_ctx, curr_ctx_addr);
 	TRACE_WRITE(obj_buf, obj_buf_offset, odata, fp_obj);
 
 	return addr;
@@ -54,7 +54,8 @@ void *calloc(size_t nmemb, size_t size)
 
 	GETTIME(time, ts);
 	OBJ_PACK(odata, objid++, (unsigned long) addr,
-			(unsigned long) (nmemb * size), RELTIME(time));
+			(unsigned long) (nmemb * size), RELTIME(time),
+			curr_ctx, curr_ctx_addr);
 	TRACE_WRITE(obj_buf, obj_buf_offset, odata, fp_obj);
 
 	return addr;
@@ -73,14 +74,15 @@ void *realloc(void* ptr, size_t size)
 	}
 
 	GETTIME(time_free, ts);
-	OBJ_PACK(odata, -1, (unsigned long) ptr, 0, RELTIME(time_free));
+	OBJ_PACK(odata, -1, (unsigned long) ptr, 0, RELTIME(time_free),
+			curr_ctx, curr_ctx_addr);
 	TRACE_WRITE(obj_buf, obj_buf_offset, odata, fp_obj);
 
 	addr = realloc_fn(ptr, size);
 
 	GETTIME(time_alloc, ts);
 	OBJ_PACK(odata, objid++, (unsigned long) addr, (unsigned long) size,
-			RELTIME(time_alloc));
+			RELTIME(time_alloc), curr_ctx, curr_ctx_addr);
 	TRACE_WRITE(obj_buf, obj_buf_offset, odata, fp_obj);
 
 	return addr;
@@ -100,7 +102,8 @@ void free(void *ptr)
 	GETTIME(time, ts);
 	free_fn(ptr);
 
-	OBJ_PACK(odata, -1, (unsigned long) ptr, 0, RELTIME(time));
+	OBJ_PACK(odata, -1, (unsigned long) ptr, 0, RELTIME(time), curr_ctx,
+			curr_ctx_addr);
 	TRACE_WRITE(obj_buf, obj_buf_offset, odata, fp_obj);
 
 	return;

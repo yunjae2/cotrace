@@ -3,7 +3,7 @@
 
 #include "common.h"
 
-#define CTX_MIN_RUNTIME		100	// In nanoseconds
+#define CTX_MIN_RUNTIME		4 * 1000 * 1000	// In nanoseconds
 #define MAX_TRACE_DEPTH		1000
 #define CTX_PACK(pkg, _ctx, _depth, _addr, _start_time, _end_time)	{\
 	pkg.ctx = _ctx;\
@@ -21,6 +21,11 @@
 #define TRACE_PUSH(data)	(ctx_stack[ctx_depth++] = data)
 #define TRACE_POP()		(ctx_stack[--ctx_depth])
 
+#define UPDATE_CURR_CTX(_ctx, _ctx_addr)	{\
+	curr_ctx = _ctx;\
+	curr_ctx_addr = (unsigned long)_ctx_addr;\
+}
+
 struct ctx_data {
 	int ctx;
 	int depth;
@@ -37,7 +42,6 @@ void __cyg_profile_func_exit(void *this_fn, void *call_site)
 	__attribute__ ((no_instrument_function));
 
 int nr_ctx;
-int curr_ctx;
 int ctx_depth;
 struct ctx_data ctx_stack[MAX_TRACE_DEPTH];
 

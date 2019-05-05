@@ -5,18 +5,22 @@
 #include <dlfcn.h>
 #include "common.h"
 
-#define OBJ_PACK(pkg, _obj, _addr, _size, _time)	{\
+#define OBJ_PACK(pkg, _obj, _addr, _size, _time, _ctx, _ctx_addr)	{\
 	pkg.obj = _obj;\
 	pkg.addr = _addr;\
 	pkg.size = _size;\
 	pkg.time = _time;\
+	pkg.ctx = _ctx;\
+	pkg.ctx_addr = _ctx_addr;\
 }
 
 struct obj_data {
 	int obj;
+	int ctx;
 	unsigned long addr;
 	unsigned long size;
 	unsigned long time;
+	unsigned long ctx_addr;
 };
 
 typedef void *(*malloc_t)(size_t size);

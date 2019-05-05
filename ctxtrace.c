@@ -47,7 +47,7 @@ void __cyg_profile_func_enter(void *this_fn, void *call_site)
 	unsigned long ctx_start_time;
 	struct ctx_data cdata;
 
-	curr_ctx = nr_ctx++;
+	UPDATE_CURR_CTX(nr_ctx++, this_fn);
 	GETRELTIME(ctx_start_time, ts);
 
 	CTX_PACK(cdata, curr_ctx, ctx_depth, this_fn, ctx_start_time, 0);
@@ -64,6 +64,7 @@ void __cyg_profile_func_exit(void *this_fn, void *call_site)
 
 	cdata = TRACE_POP();
 	CTX_UNPACK(cdata, curr_ctx, addr, ctx_start_time, ctx_end_time);
+	UPDATE_CURR_CTX(curr_ctx, addr);
 
 	GETRELTIME(ctx_end_time, ts);
 	if (ctx_end_time - ctx_start_time >= CTX_MIN_RUNTIME) {

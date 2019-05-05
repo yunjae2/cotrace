@@ -38,6 +38,8 @@ void ctxtrace_init(void) __attribute__ ((no_instrument_function));
 void ctxtrace_term(void) __attribute__ ((no_instrument_function));
 
 int disable_objtrace;
+int curr_ctx;
+unsigned long curr_ctx_addr;
 FILE *fp_ctx, *fp_obj;
 
 unsigned long start_time;
