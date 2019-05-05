@@ -15,11 +15,11 @@
 }
 
 struct obj_data {
-	int obj;
-	int ctx;
+	long obj;
 	unsigned long addr;
 	unsigned long size;
 	unsigned long time;
+	long ctx;
 	unsigned long ctx_addr;
 };
 

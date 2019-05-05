@@ -2,7 +2,7 @@
 
 void ctxtrace_init(void)
 {
-	UPDATE_CTX(-1, -1, 0, 0, 0);
+	UPDATE_CTX(0, 0, 0, 0, -1);	// Init context
 	ctx_buf_offset = 0;
 	fp_ctx = fopen("ctx.data", "w");
 }
@@ -50,7 +50,7 @@ void __cyg_profile_func_enter(void *this_fn, void *call_site)
 		TRACE_PUSH(curr_ctx);
 
 	GETRELTIME(time, ts);
-	UPDATE_CTX(nr_ctx++, curr_ctx.depth + 1, this_fn, time, 0);
+	UPDATE_CTX(nr_ctx++, this_fn, time, 0, curr_ctx.depth + 1);
 }
 
 void __cyg_profile_func_exit(void *this_fn, void *call_site)

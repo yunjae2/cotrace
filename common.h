@@ -31,11 +31,11 @@
 }
 
 struct ctx_data {
-	int id;
-	int depth;
+	long id;
 	unsigned long addr;
 	unsigned long start_time;
 	unsigned long end_time;
+	int depth;
 };
 
 void flush_trace_buf(void *buf, size_t size, int *offset, FILE *fp)

@@ -7,12 +7,12 @@
 #define MAX_TRACE_DEPTH		1000
 #define TRACE_PUSH(data)	(ctx_stack[curr_ctx.depth] = data)
 #define TRACE_POP()		(ctx_stack[curr_ctx.depth - 1])
-#define UPDATE_CTX(_id, _depth, _addr, _start_time, _end_time)	{\
+#define UPDATE_CTX(_id, _addr, _start_time, _end_time, _depth)	{\
 	curr_ctx.id = _id;\
-	curr_ctx.depth = _depth;\
 	curr_ctx.addr = (unsigned long) _addr;\
 	curr_ctx.start_time = _start_time;\
 	curr_ctx.end_time = _end_time;\
+	curr_ctx.depth = _depth;\
 }
 
 
@@ -24,7 +24,7 @@ void __cyg_profile_func_exit(void *this_fn, void *call_site)
 	__attribute__ ((no_instrument_function));
 
 FILE *fp_ctx;
-int nr_ctx;
+long nr_ctx;
 struct ctx_data curr_ctx;
 struct ctx_data ctx_stack[MAX_TRACE_DEPTH];
 
