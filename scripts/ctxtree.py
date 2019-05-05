@@ -8,40 +8,47 @@ import subprocess
 import re
 
 
-def convert(file_path, start_ctx, max_depth):
-    ctxidx = {}
-    ctxtree = []
+def extract_ctxlist(file_path):
+    ctxlist = []
     with open(file_path, 'rb') as f:
-        depth = 0
-        report_on = False
-        cidx = 0
-        nr_ctx = 0
         while f.read(1):
             f.seek(-1, 1)
             ctx = unpack('i', f.read(4))[0]
-            f.read(4)
+            depth = unpack('i', f.read(4))[0]
             addr = unpack('L', f.read(8))[0]
-            time = unpack('L', f.read(8))[0]
+            start_time = unpack('L', f.read(8))[0]
+            end_time = unpack('L', f.read(8))[0]
 
-            if not report_on:
-                if ctx == start_ctx:
-                    report_on = True
-                else:
-                    continue
+            ctxlist.append([ctx, addr, start_time, end_time, depth])
 
-            if ctx not in ctxidx:
-                if depth > max_depth:
-                    continue
-                ctxidx[ctx] = nr_ctx
-                ctxtree.append([ctx, addr, time, -1, depth])
-                nr_ctx = nr_ctx + 1
-                depth = depth + 1
+    return ctxlist
+
+
+def convert(file_path, start_ctxid, max_depth):
+    ctxidx = {}
+    ctxtree = []
+    ctxlist = extract_ctxlist(file_path)
+    ctxlist.sort(key = lambda tup: tup[2])
+
+    report_on = False
+    start_depth = -1
+    for ctx in ctxlist:
+        ctxid, addr, start_time, end_time, depth = ctx
+
+        if depth <= start_depth:
+            break
+
+        if not report_on:
+            if ctxid == start_ctxid:
+                report_on = True
+                start_depth = depth
             else:
-                cidx = ctxidx[ctx]
-                ctxtree[cidx][3] = time
-                depth = depth - 1
-                if ctx == start_ctx:
-                    break
+                continue
+
+        if (depth - start_depth) > max_depth:
+            continue
+
+        ctxtree.append([ctxid, addr, start_time, end_time, depth - start_depth])
 
     return ctxtree
 
