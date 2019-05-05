@@ -4,8 +4,9 @@
 #include "common.h"
 
 #define MAX_TRACE_DEPTH		1000
-#define CTX_PACK(pkg, _ctx, _time)	{\
+#define CTX_PACK(pkg, _ctx, _addr, _time)	{\
 	pkg.ctx = _ctx;\
+	pkg.addr = (unsigned long)_addr;\
 	pkg.time = _time;\
 }
 #define CTX_UNPACK(pkg, _ctx, _time)	{\
@@ -17,6 +18,7 @@
 
 struct ctx_data {
 	int ctx;
+	unsigned long addr;
 	unsigned long time;
 };
 
