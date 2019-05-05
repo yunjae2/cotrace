@@ -17,6 +17,10 @@
 			(unsigned long)ts.tv_nsec);\
 }
 #define RELTIME(time)		(time - start_time)
+#define GETRELTIME(time, ts)	{\
+	GETTIME(time, ts);\
+	time = RELTIME(time);\
+}
 
 /* Macros for write buffer */
 #define MAX_BUF_OFFSET		1000

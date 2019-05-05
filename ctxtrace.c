@@ -44,13 +44,13 @@ void trace_end(void)
 void __cyg_profile_func_enter(void *this_fn, void *call_site)
 {
 	struct timespec ts;
-	unsigned long time;
+	unsigned long ctx_start_time;
 	struct ctx_data cdata;
 
 	curr_ctx = nr_ctx++;
-	GETTIME(time, ts);
+	GETRELTIME(ctx_start_time, ts);
 
-	CTX_PACK(cdata, curr_ctx, this_fn, RELTIME(time));
+	CTX_PACK(cdata, curr_ctx, this_fn, ctx_start_time);
 	TRACE_WRITE(ctx_buf, ctx_buf_offset, cdata, fp_ctx);
 	TRACE_PUSH(cdata);
 }
@@ -65,7 +65,7 @@ void __cyg_profile_func_exit(void *this_fn, void *call_site)
 	cdata = TRACE_POP();
 	CTX_UNPACK(cdata, curr_ctx, ctx_start_time);
 
-	GETTIME(ctx_end_time, ts);
-	CTX_PACK(cdata, curr_ctx, this_fn, RELTIME(ctx_end_time));
+	GETRELTIME(ctx_end_time, ts);
+	CTX_PACK(cdata, curr_ctx, this_fn, ctx_end_time);
 	TRACE_WRITE(ctx_buf, ctx_buf_offset, cdata, fp_ctx);
 }
