@@ -18,6 +18,7 @@ def convert(file_path, start_ctx, max_depth):
             f.seek(-1, 1)
             ctx = unpack('i', f.read(4))[0]
             f.read(4)
+            addr = unpack('L', f.read(8))[0]
             time = unpack('L', f.read(8))[0]
 
             if not report_on:
@@ -30,12 +31,12 @@ def convert(file_path, start_ctx, max_depth):
                 if depth > max_depth:
                     continue
                 ctxidx[ctx] = nr_ctx
-                ctxtree.append([ctx, time, -1, depth])
+                ctxtree.append([ctx, addr, time, -1, depth])
                 nr_ctx = nr_ctx + 1
                 depth = depth + 1
             else:
                 cidx = ctxidx[ctx]
-                ctxtree[cidx][2] = time
+                ctxtree[cidx][3] = time
                 depth = depth - 1
                 if ctx == start_ctx:
                     break
@@ -47,7 +48,7 @@ def print_ctxtree(ctxtree, max_depth):
     time_total = [[]] * (max_depth + 1)
     print "#  <elapsed time>        <context tree>"
     for ctxline in ctxtree:
-        ctx, start, end, depth = ctxline
+        ctx, addr, start, end, depth = ctxline
         time = end - start
         time_total[depth] = time
 
@@ -66,7 +67,7 @@ def print_ctxtree(ctxtree, max_depth):
         prstring += "  "
         if depth:
             prstring += "    " + "|   " * (depth - 1)
-        prstring += str(ctx)
+        prstring += str(ctx) + "    " + hex(addr)
 
         print prstring
 
