@@ -10,18 +10,21 @@ void ctxtrace_init(void)
 
 void ctxtrace_term(void)
 {
+	int disable_objtrace_save = disable_objtrace;
+
 	if (ctx_buf_offset)
 		flush_trace_buf(ctx_buf, sizeof(struct ctx_data),
 				&ctx_buf_offset, fp_ctx);
 	disable_objtrace = 1;
 	fclose(fp_ctx);
-	disable_objtrace = 0;
+	disable_objtrace = disable_objtrace_save;
 }
 
 void trace_begin(void)
 {
 	struct timespec ts;
 	unsigned long res;
+	int disable_objtrace_save = disable_objtrace;
 
 	disable_objtrace = 1;
 	GETRES(res, ts);
@@ -29,7 +32,7 @@ void trace_begin(void)
 
 	objtrace_init();
 	ctxtrace_init();
-	disable_objtrace = 0;
+	disable_objtrace = disable_objtrace_save;
 }
 
 void trace_end(void)
