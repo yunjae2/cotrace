@@ -47,6 +47,10 @@ void *calloc(size_t nmemb, size_t size)
 	unsigned long time;
 	struct obj_data odata;
 
+	/* dlsym() calls calloc() internally, so deal with it */
+	if (calloc_fn == NULL)
+		return calloc_buffer;
+
 	addr = calloc_fn(nmemb, size);
 
 	if (disable_objtrace)

@@ -34,6 +34,8 @@ void *calloc(size_t nmemb, size_t size)
 void *realloc(void* ptr, size_t size) __attribute__ ((no_instrument_function));
 void free(void *ptr) __attribute__ ((no_instrument_function));
 
+unsigned char calloc_buffer[8192];
+
 malloc_t malloc_fn;
 calloc_t calloc_fn;
 realloc_t realloc_fn;
