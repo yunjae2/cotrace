@@ -2,8 +2,7 @@
 
 void ctxtrace_init(void)
 {
-	nr_ctx = 0;
-	ctx_depth = 0;
+	UPDATE_CTX(-1, -1, 0, 0, 0);
 	ctx_buf_offset = 0;
 	fp_ctx = fopen("ctx.data", "w");
 }
@@ -44,31 +43,26 @@ void trace_end(void)
 void __cyg_profile_func_enter(void *this_fn, void *call_site)
 {
 	struct timespec ts;
-	unsigned long ctx_start_time;
-	struct ctx_data cdata;
+	unsigned long time;
 
-	UPDATE_CURR_CTX(nr_ctx++, this_fn);
-	GETRELTIME(ctx_start_time, ts);
+	// Init context has depth of -1
+	if (curr_ctx.depth != -1)
+		TRACE_PUSH(curr_ctx);
 
-	CTX_PACK(cdata, curr_ctx, ctx_depth, this_fn, ctx_start_time, 0);
-	TRACE_PUSH(cdata);
+	GETRELTIME(time, ts);
+	UPDATE_CTX(nr_ctx++, curr_ctx.depth + 1, this_fn, time, 0);
 }
 
 void __cyg_profile_func_exit(void *this_fn, void *call_site)
 {
 	struct timespec ts;
-	unsigned long addr;
-	unsigned long ctx_start_time;
-	unsigned long ctx_end_time;
-	struct ctx_data cdata;
 
-	cdata = TRACE_POP();
-	CTX_UNPACK(cdata, curr_ctx, addr, ctx_start_time, ctx_end_time);
-	UPDATE_CURR_CTX(curr_ctx, addr);
-
-	GETRELTIME(ctx_end_time, ts);
-	if (ctx_end_time - ctx_start_time >= CTX_MIN_RUNTIME) {
-		CTX_PACK(cdata, curr_ctx, ctx_depth, addr, ctx_start_time, ctx_end_time);
-		TRACE_WRITE(ctx_buf, ctx_buf_offset, cdata, fp_ctx);
+	GETRELTIME(curr_ctx.end_time, ts);
+	if (curr_ctx.end_time - curr_ctx.start_time >= CTX_MIN_RUNTIME) {
+		TRACE_WRITE(ctx_buf, ctx_buf_offset, curr_ctx, fp_ctx);
 	}
+
+	// Do not pop when main() ends
+	if (curr_ctx.depth != 0)
+		curr_ctx = TRACE_POP();
 }

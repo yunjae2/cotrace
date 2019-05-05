@@ -30,6 +30,14 @@
 		flush_trace_buf(buf, sizeof(data), &offset, fp);\
 }
 
+struct ctx_data {
+	int id;
+	int depth;
+	unsigned long addr;
+	unsigned long start_time;
+	unsigned long end_time;
+};
+
 void flush_trace_buf(void *buf, size_t size, int *offset, FILE *fp)
 	__attribute__ ((no_instrument_function));
 void objtrace_init(void) __attribute__ ((no_instrument_function));
@@ -37,10 +45,9 @@ void objtrace_term(void) __attribute__ ((no_instrument_function));
 void ctxtrace_init(void) __attribute__ ((no_instrument_function));
 void ctxtrace_term(void) __attribute__ ((no_instrument_function));
 
-int disable_objtrace;
-int curr_ctx;
-unsigned long curr_ctx_addr;
-FILE *fp_ctx, *fp_obj;
+extern int disable_objtrace;
+extern struct ctx_data curr_ctx;
+extern FILE *fp_ctx, *fp_obj;
 
 unsigned long start_time;
 

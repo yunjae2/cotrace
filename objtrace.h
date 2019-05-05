@@ -39,6 +39,8 @@ calloc_t calloc_fn;
 realloc_t realloc_fn;
 free_t free_fn;
 
+FILE *fp_obj;
+int disable_objtrace;
 int objid;
 
 int obj_buf_offset;
