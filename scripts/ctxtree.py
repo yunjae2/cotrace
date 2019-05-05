@@ -88,7 +88,7 @@ def print_ctxtree(ctxtree, func_table, max_depth):
                 symbol = fname
                 break
 
-        prstring = (str(time / 1000) + " us").rjust(12) + " "
+        prstring = ("%.3f" % (time / 1000) + " us").rjust(12) + " "
         parent_depth = max(depth - 1, 0)
         time_percent = time / time_total[parent_depth] * 100
 
