@@ -9,3 +9,5 @@
 *.data
 *.o
 *.so
+
+scripts/data
