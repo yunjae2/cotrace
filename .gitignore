@@ -9,5 +9,6 @@
 *.data
 *.o
 *.so
+*.pyc
 
 scripts/data
