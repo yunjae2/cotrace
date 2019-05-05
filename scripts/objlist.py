@@ -33,6 +33,7 @@ def convert(file_path):
 
 
 def print_objlist(objlist, func_table):
+    print "<obj id>  <base address>    <size>   <alloc ctx>  <ctx name>"
     for obj in objlist:
         objid, addr, size, alloc_ctx, alloc_ctx_addr, free_ctx, free_ctx_addr\
                 = obj
