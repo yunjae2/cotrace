@@ -3,23 +3,30 @@
 
 #include "common.h"
 
+#define CTX_MIN_RUNTIME		100	// In nanoseconds
 #define MAX_TRACE_DEPTH		1000
-#define CTX_PACK(pkg, _ctx, _addr, _time)	{\
+#define CTX_PACK(pkg, _ctx, _depth, _addr, _start_time, _end_time)	{\
 	pkg.ctx = _ctx;\
+	pkg.depth= _depth;\
 	pkg.addr = (unsigned long)_addr;\
-	pkg.time = _time;\
+	pkg.start_time = _start_time;\
+	pkg.end_time = _end_time;\
 }
-#define CTX_UNPACK(pkg, _ctx, _time)	{\
+#define CTX_UNPACK(pkg, _ctx, _addr, _start_time, _end_time)	{\
 	_ctx = pkg.ctx;\
-	_time = pkg.time;\
+	_addr = pkg.addr;\
+	_start_time = pkg.start_time;\
+	_end_time = pkg.end_time;\
 }
 #define TRACE_PUSH(data)	(ctx_stack[ctx_depth++] = data)
 #define TRACE_POP()		(ctx_stack[--ctx_depth])
 
 struct ctx_data {
 	int ctx;
+	int depth;
 	unsigned long addr;
-	unsigned long time;
+	unsigned long start_time;
+	unsigned long end_time;
 };
 
 void trace_begin(void) __attribute__ ((constructor, no_instrument_function));
