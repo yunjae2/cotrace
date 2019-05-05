@@ -3,9 +3,8 @@
 from __future__ import division
 from termcolor import colored
 from struct import unpack
+from symbol import extract_func_symbols
 import sys
-import subprocess
-import re
 
 
 def extract_ctxlist(file_path):
@@ -13,14 +12,16 @@ def extract_ctxlist(file_path):
     with open(file_path, 'rb') as f:
         while f.read(1):
             f.seek(-1, 1)
-            ctx = unpack('i', f.read(4))[0]
-            depth = unpack('i', f.read(4))[0]
+            ctx = unpack('l', f.read(8))[0]
             addr = unpack('L', f.read(8))[0]
             start_time = unpack('L', f.read(8))[0]
             end_time = unpack('L', f.read(8))[0]
+            depth = unpack('i', f.read(4))[0]
+            f.read(4)
 
             ctxlist.append([ctx, addr, start_time, end_time, depth])
 
+    print "root ctx: " + str(ctxlist[-1][0])
     return ctxlist
 
 
@@ -51,27 +52,6 @@ def convert(file_path, start_ctxid, max_depth):
         ctxtree.append([ctxid, addr, start_time, end_time, depth - start_depth])
 
     return ctxtree
-
-
-def extract_func_symbols(bin_file):
-    func_table = []
-
-    cmd = "nm -nS --defined-only %s" % bin_file
-    res = subprocess.check_output(cmd, shell=True, executable="/bin/bash")
-    lines = re.split('\n', res)
-
-    for line in lines:
-        fields = line.strip().split()
-        if len(fields) != 4:
-            continue
-        if fields[2] != 'T' and fields[2] != 't':
-            break
-        addr = int(fields[0], 16)
-        size = int(fields[1], 16)
-        symbol = fields[3]
-        func_table.append([addr, addr + size, symbol])
-
-    return func_table
 
 
 def print_ctxtree(ctxtree, func_table, max_depth):
