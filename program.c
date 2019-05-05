@@ -18,7 +18,7 @@ void bar(void)
 	ptr = (int *)malloc(10 * sizeof(int));
 	free(ptr);
 	ptr = (int *)calloc(20, sizeof(int));
-	ptr = (int *)realloc(ptr, 30 * sizeof(int));
+	ptr = (int *)realloc(ptr, 30000000 * sizeof(int));
 	free(ptr);
 }
 
