@@ -32,6 +32,7 @@ void cotrace_begin(void)
 	objtrace_init();
 	ctxtrace_init();
 	disable_objtrace = disable_objtrace_save;
+	printf("cotrace initialized successfully!\n");
 }
 
 void cotrace_end(void)
