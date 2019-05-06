@@ -19,7 +19,7 @@ void ctxtrace_term(void)
 	disable_objtrace = disable_objtrace_save;
 }
 
-void trace_begin(void)
+void cotrace_begin(void)
 {
 	struct timespec ts;
 	unsigned long res;
@@ -34,7 +34,7 @@ void trace_begin(void)
 	disable_objtrace = disable_objtrace_save;
 }
 
-void trace_end(void)
+void cotrace_end(void)
 {
 	ctxtrace_term();
 	objtrace_term();

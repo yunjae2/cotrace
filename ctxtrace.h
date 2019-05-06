@@ -16,8 +16,8 @@
 }
 
 
-void trace_begin(void) __attribute__ ((constructor, no_instrument_function));
-void trace_end(void) __attribute__ ((destructor, no_instrument_function));
+void cotrace_begin(void) __attribute__ ((constructor, no_instrument_function));
+void cotrace_end(void) __attribute__ ((destructor, no_instrument_function));
 void __cyg_profile_func_enter(void *this_fn, void *call_site)
 	__attribute__ ((no_instrument_function));
 void __cyg_profile_func_exit(void *this_fn, void *call_site)
