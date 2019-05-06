@@ -25,6 +25,8 @@ def convert(file_path):
                         -1, -1])
                 objmap[addr] = obj
             else:
+                if addr not in objmap:
+                    continue
                 obj = objmap[addr]
                 objlist[obj][5:7] = [ctx, ctx_addr];
 
