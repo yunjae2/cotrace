@@ -3,13 +3,6 @@
 void objtrace_init(void)
 {
 	objid = 0;
-
-	in_dlsym = 1;
-	malloc_fn = (malloc_t)dlsym(RTLD_NEXT, "malloc");
-	calloc_fn = (calloc_t)dlsym(RTLD_NEXT, "calloc");
-	realloc_fn = (realloc_t)dlsym(RTLD_NEXT, "realloc");
-	free_fn = (free_t)dlsym(RTLD_NEXT, "free");
-	in_dlsym = 0;
 	fp_obj = fopen("obj.data", "w");
 }
 
@@ -31,6 +24,12 @@ void *malloc(size_t size)
 	struct timespec ts;
 	unsigned long time;
 	struct obj_data odata;
+
+	if (malloc_fn == NULL) {
+		in_dlsym = 1;
+		malloc_fn = (malloc_t)dlsym(RTLD_NEXT, "malloc");
+		in_dlsym = 0;
+	}
 
 	addr = malloc_fn(size);
 
@@ -56,6 +55,12 @@ void *calloc(size_t nmemb, size_t size)
 	if (in_dlsym)
 		return calloc_buffer;
 
+	if (calloc_fn == NULL) {
+		in_dlsym = 1;
+		calloc_fn = (calloc_t)dlsym(RTLD_NEXT, "calloc");
+		in_dlsym = 0;
+	}
+
 	addr = calloc_fn(nmemb, size);
 
 	if (disable_objtrace)
@@ -76,6 +81,12 @@ void *realloc(void* ptr, size_t size)
 	struct timespec ts;
 	unsigned long time_free, time_alloc;
 	struct obj_data odata;
+
+	if (realloc_fn == NULL) {
+		in_dlsym = 1;
+		realloc_fn = (realloc_t)dlsym(RTLD_NEXT, "realloc");
+		in_dlsym = 0;
+	}
 
 	if (disable_objtrace) {
 		addr = realloc_fn(ptr, size);
@@ -102,6 +113,12 @@ void free(void *ptr)
 	struct timespec ts;
 	unsigned long time;
 	struct obj_data odata;
+
+	if (free_fn == NULL) {
+		in_dlsym = 1;
+		free_fn = (free_t)dlsym(RTLD_NEXT, "free");
+		in_dlsym = 0;
+	}
 
 	if (disable_objtrace) {
 		free_fn(ptr);
