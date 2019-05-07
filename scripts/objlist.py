@@ -22,35 +22,42 @@ def convert(file_path):
 
             if obj != -1:
                 objlist.append([obj, addr, size, ctx, ctx_addr,\
-                        -1, -1])
+                        time, -1, -1, -1])
                 objmap[addr] = obj
             else:
                 if addr not in objmap:
                     continue
                 obj = objmap[addr]
-                objlist[obj][5:7] = [ctx, ctx_addr];
+                objlist[obj][6:9] = [ctx, ctx_addr, time];
 
     objlist.sort(key = lambda tup: tup[2], reverse = True)
     return objlist
 
 
 def print_objlist(objlist, func_table):
-    print "<obj id>  <base address>    <size>   <alloc ctx>  <ctx name>"
+    print "<obj id>  <base address>    <size>   <alloc ctx>  <ctx name>  <lifetime>"
     for obj in objlist:
-        objid, addr, size, alloc_ctx, alloc_ctx_addr, free_ctx, free_ctx_addr\
-                = obj
+        objid, addr, size, alloc_ctx, alloc_ctx_addr, alloc_time,\
+        free_ctx, free_ctx_addr, free_time = obj
 
+        # Resolve an address if corresponding symbol is found
         symbol = hex(alloc_ctx_addr)
         for (fstart, fend, fname) in func_table:
             if alloc_ctx_addr >= fstart and alloc_ctx_addr < fend:
                 symbol = fname
                 break
 
+        # Lifetime of objects
+        time = "%.2f s" % ((free_time - alloc_time) / (1000 * 1000 * 1000))
+        if free_time == -1:
+            time = "INF"
+
         prstring = str(objid).rjust(7)
         prstring += '   ' + hex(addr).rjust(14)
         prstring += '  (' + si_format(size).rjust(7) + 'B)'
         prstring += '   ' + str(alloc_ctx).rjust(8)
-        prstring += '   ' + symbol
+        prstring += '   ' + symbol.rjust(9)
+        prstring += '   ' + time.rjust(9)
         print prstring
 
 
