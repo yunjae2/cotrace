@@ -11,9 +11,12 @@ void ctxtrace_term(void)
 {
 	int disable_objtrace_save = disable_objtrace;
 
-	if (ctx_buf_offset)
+	if (ctx_buf_offset) {
 		flush_trace_buf(ctx_buf, sizeof(struct ctx_data),
 				&ctx_buf_offset, fp_ctx);
+		printf("ctxtrace buffer flushed!\n");
+	}
+
 	disable_objtrace = 1;
 	fclose(fp_ctx);
 	disable_objtrace = disable_objtrace_save;
@@ -39,6 +42,7 @@ void cotrace_end(void)
 {
 	ctxtrace_term();
 	objtrace_term();
+	printf("cotrace terminated successfully!\n");
 }
 
 void __cyg_profile_func_enter(void *this_fn, void *call_site)
