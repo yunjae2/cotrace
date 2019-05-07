@@ -29,6 +29,7 @@ typedef void *(*realloc_t)(void *ptr, size_t size);
 typedef void (*free_t)(void *ptr);
 
 void alloc_init(void) __attribute__ ((constructor));
+void import_hint(void);
 
 void *malloc(size_t size);
 void *calloc(size_t nmemb, size_t size);
@@ -42,14 +43,13 @@ calloc_t calloc_fn;
 realloc_t realloc_fn;
 free_t free_fn;
 
+int internal_path;
+
 long objid;
 
+char hint_path[100] = "/home/yjlee/git/parsec/hints/hint.data";
+int nr_hints;
 int target_idx;
-struct hint_data mhint[MAX_NR_HINT_OBJS] = {
-	{4, 0, 7200000},
-	{6, 0, 140600},
-	{7, 0, 895200},
-	{-1, 0, 0},
-};
+struct hint_data *mhint;
 
 #endif
