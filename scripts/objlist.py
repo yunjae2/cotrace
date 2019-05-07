@@ -35,7 +35,7 @@ def convert(file_path):
 
 
 def print_objlist(objlist, func_table):
-    print "<obj id>  <base address>    <size>   <alloc ctx>  <ctx name>  <lifetime>"
+    print "<obj id>  <base address>    <size>   <lifetime>  <alloc ctx>  <ctx name>"
     for obj in objlist:
         objid, addr, size, alloc_ctx, alloc_ctx_addr, alloc_time,\
         free_ctx, free_ctx_addr, free_time = obj
@@ -52,12 +52,12 @@ def print_objlist(objlist, func_table):
         if free_time == -1:
             time = "INF"
 
-        prstring = str(objid).rjust(7)
-        prstring += '   ' + hex(addr).rjust(14)
+        prstring = str(objid).rjust(8)
+        prstring += '  ' + hex(addr).rjust(14)
         prstring += '  (' + si_format(size).rjust(7) + 'B)'
-        prstring += '   ' + str(alloc_ctx).rjust(8)
-        prstring += '   ' + symbol.rjust(9)
-        prstring += '   ' + time.rjust(9)
+        prstring += '  ' + time.rjust(9)
+        prstring += '    ' + str(alloc_ctx).rjust(9)
+        prstring += '  ' + symbol
         print prstring
 
 
