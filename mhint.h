@@ -8,17 +8,17 @@
 
 #define MAX_NR_HINT_OBJS	10
 #define CHECK_HINT(_objid, _addr)	{\
-	if (hobj[next_hobj].id == _objid) {\
-		if(mlock(_addr + hobj[next_hobj].offset, hobj[next_hobj].size))\
+	if (mhint[target_idx].objid == _objid) {\
+		if(mlock(_addr + mhint[target_idx].offset, mhint[target_idx].size))\
 			printf("obj %ld: mlock failed!\n", _objid);\
 		else\
 			printf("obj %ld: mlock succeed!\n", _objid);\
-		next_hobj++;\
+		target_idx++;\
 	}\
 }
 
-struct hint_obj {
-	long id;
+struct hint_data {
+	long objid;
 	unsigned long offset;
 	unsigned long size;
 };
@@ -44,8 +44,8 @@ free_t free_fn;
 
 long objid;
 
-int next_hobj;
-struct hint_obj hobj[MAX_NR_HINT_OBJS] = {
+int target_idx;
+struct hint_data mhint[MAX_NR_HINT_OBJS] = {
 	{4, 0, 7200000},
 	{6, 0, 140600},
 	{7, 0, 895200},
