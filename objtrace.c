@@ -4,10 +4,12 @@ void objtrace_init(void)
 {
 	objid = 0;
 
+	in_dlsym = 1;
 	malloc_fn = (malloc_t)dlsym(RTLD_NEXT, "malloc");
 	calloc_fn = (calloc_t)dlsym(RTLD_NEXT, "calloc");
 	realloc_fn = (realloc_t)dlsym(RTLD_NEXT, "realloc");
 	free_fn = (free_t)dlsym(RTLD_NEXT, "free");
+	in_dlsym = 0;
 	fp_obj = fopen("obj.data", "w");
 }
 
@@ -51,7 +53,7 @@ void *calloc(size_t nmemb, size_t size)
 	struct obj_data odata;
 
 	/* dlsym() calls calloc() internally, so deal with it */
-	if (calloc_fn == NULL)
+	if (in_dlsym)
 		return calloc_buffer;
 
 	addr = calloc_fn(nmemb, size);

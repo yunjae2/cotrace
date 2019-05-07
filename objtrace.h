@@ -43,6 +43,7 @@ free_t free_fn;
 
 FILE *fp_obj;
 int disable_objtrace;
+int in_dlsym;
 int objid;
 
 int obj_buf_offset;
