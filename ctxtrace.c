@@ -33,14 +33,12 @@ void cotrace_begin(void)
 	objtrace_init();
 	ctxtrace_init();
 	disable_objtrace = disable_objtrace_save;
-	printf("cotrace initialized successfully!\n");
 }
 
 void cotrace_end(void)
 {
 	ctxtrace_term();
 	objtrace_term();
-	printf("cotrace terminated successfully!\n");
 }
 
 void __cyg_profile_func_enter(void *this_fn, void *call_site)
