@@ -13,6 +13,7 @@
 			printf("obj %ld: mlock failed!\n", _objid);\
 		else\
 			printf("obj %ld: mlock succeed!\n", _objid);\
+		next_hobj++;\
 	}\
 }
 
@@ -45,7 +46,9 @@ long objid;
 
 int next_hobj;
 struct hint_obj hobj[MAX_NR_HINT_OBJS] = {
-	{3, 0, 8000000},
+	{4, 0, 7200000},
+	{6, 0, 140600},
+	{7, 0, 895200},
 	{-1, 0, 0},
 };
 
