@@ -47,6 +47,9 @@ void *realloc(void* ptr, size_t size)
 
 void free(void *ptr)
 {
+	if (ptr == calloc_buffer)
+		return;
+
 	free_fn(ptr);
 	return;
 }
