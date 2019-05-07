@@ -120,6 +120,9 @@ void free(void *ptr)
 		in_dlsym = 0;
 	}
 
+	if (ptr == calloc_buffer)
+		return;
+
 	if (disable_objtrace) {
 		free_fn(ptr);
 		return;
