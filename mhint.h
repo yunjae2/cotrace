@@ -8,7 +8,7 @@
 
 #define MAX_NR_HINT_OBJS	10
 #define CHECK_HINT(_objid, _addr)	{\
-	if (mhint[target_idx].objid == _objid) {\
+	if (mhint[target_idx].objid == _objid && target_idx < nr_hints) {\
 		if(mlock(_addr + mhint[target_idx].offset, mhint[target_idx].size))\
 			printf("obj %ld: mlock failed!\n", _objid);\
 		else\
