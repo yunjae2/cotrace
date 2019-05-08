@@ -3,10 +3,10 @@ all: program lib
 lib: libcotrace.so libmhint.so
 
 program_hint: program.c libmhint.so
-	gcc -Wl,-rpath,. -o program program.c -L. -lmhint
+	gcc -o program program.c
 
 program: program.c libcotrace.so
-	gcc -no-pie -finstrument-functions -Wl,-rpath,. -o program program.c -L. -lcotrace
+	gcc -no-pie -finstrument-functions -o program program.c
 
 libmhint.so: mhint.o
 	gcc -shared -fPIC -o libmhint.so mhint.o -ldl
@@ -28,6 +28,12 @@ common.o: common.c common.h
 
 run: program
 	./program
+
+run_trace: program libcotrace.so
+	LD_PRELOAD=./libcotrace.so ./program
+
+run_hint: program libmhint.so
+	LD_PRELOAD=./libmhint.so ./program
 
 clean:
 	rm -f *.o *.so *.data program
