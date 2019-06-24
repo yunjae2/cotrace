@@ -47,7 +47,7 @@ int internal_path;
 
 long objid;
 
-char hint_path[100] = "/home/yjlee/git/parsec/hints/hint";
+char hint_path[100] = "./hint";
 int nr_hints;
 int target_idx;
 struct hint_data *mhint;
