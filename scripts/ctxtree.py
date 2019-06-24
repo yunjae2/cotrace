@@ -21,14 +21,14 @@ def extract_ctxlist(file_path):
 
             ctxlist.append([ctx, addr, start_time, end_time, depth])
 
-    print "root ctx: " + str(ctxlist[-1][0])
-    return ctxlist
+    root_ctx = ctxlist[-1][0]
+    print "root ctx: " + str(root_ctx)
+    return ctxlist, root_ctx
 
 
-def convert(file_path, start_ctxid, max_depth):
+def convert(ctxlist, start_ctxid, max_depth):
     ctxidx = {}
     ctxtree = []
-    ctxlist = extract_ctxlist(file_path)
     ctxlist.sort(key = lambda tup: tup[2])
 
     report_on = False
@@ -86,17 +86,22 @@ def print_ctxtree(ctxtree, func_table, max_depth):
 
 
 def main():
-    if len(sys.argv) != 5:
-        print "Usage: %s <binary file> <ctx file> <start ctx> <max depth>" \
+    if len(sys.argv) != 3 and len(sys.argv) != 5:
+        print "Usage: %s <binary file> <ctx file> [<start ctx> <max depth>]" \
             % sys.argv[0]
         sys.exit(1)
 
     bin_file = sys.argv[1]
     ctx_file = sys.argv[2]
-    start_ctx = int(sys.argv[3])
-    max_depth = int(sys.argv[4])
 
-    ctxtree = convert(ctx_file, start_ctx, max_depth)
+    ctxlist, root_ctx = extract_ctxlist(ctx_file)
+    if len(sys.argv) == 5:
+        start_ctx = int(sys.argv[3])
+        max_depth = int(sys.argv[4])
+    else:
+        start_ctx = root_ctx
+        max_depth = 2
+    ctxtree = convert(ctxlist, start_ctx, max_depth)
     func_table = extract_func_symbols(bin_file)
     print_ctxtree(ctxtree, func_table, max_depth)
 
