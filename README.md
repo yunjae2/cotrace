@@ -28,7 +28,7 @@ Preload the cotrace library when running a program like below.
 ```
 $ LD_PRELOAD=<cotrace directory>/libcotrace.so <executable>
 ```
-The trace results will be saved to `ctx.data` and `obj.data` in binary format.
+The trace results will be saved to `ctx.data` and `obj.data` in binary format in the current directory.
 
 
 ## Generating human-friendly results
@@ -37,13 +37,13 @@ The trace results and an executable of a program are used as inputs.
 
 #### Generating context tree
 ```
-$ ./scripts/ctxtree.py <executable> <ctx.data>
+$ ./scripts/ctxtree.py <executable> <ctx data file>
 ```
 For further use, run the script with `-h` option.
 
 #### Generating object list
 ```
-$ ./scripts/objlist.py <executable> <obj.data>
+$ ./scripts/objlist.py <executable> <obj data file>
 ```
 The objects are sorted by size in descending order.
 
