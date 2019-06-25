@@ -1,3 +1,6 @@
+#CTXFLAGS:= -DCTX_MIN_RUNTIME=1000	# In nanoseconds
+
+
 all: program lib
 
 lib: libcotrace.so libmhint.so
@@ -18,7 +21,7 @@ mhint.o: mhint.c mhint.h
 	gcc -c -fPIC -o mhint.o mhint.c
 
 ctxtrace.o: ctxtrace.c ctxtrace.h common.h
-	gcc -c -fPIC -o ctxtrace.o ctxtrace.c
+	gcc $(CTXFLAGS) -c -fPIC -o ctxtrace.o ctxtrace.c
 
 objtrace.o: objtrace.c objtrace.h common.h
 	gcc -c -fPIC -o objtrace.o objtrace.c
