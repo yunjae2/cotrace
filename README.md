@@ -13,6 +13,7 @@ $ ./scripts/objlist.py program obj.data
 
 ## Building cotrace
 `libcotrace.so` is needed for tracing. Run `make` to build the library in the cotrace directory.
+To reduce the overhead of context tracing, contexts which have runtimes lower than 4ms are not traced.The threshold can be manually set using CTXFLAGS in Makefile.
 
 
 ## Buildling a program to trace
