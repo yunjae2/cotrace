@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+from __future__ import division
 from struct import unpack
 from si_prefix import si_format
 from symbol import extract_func_symbols
