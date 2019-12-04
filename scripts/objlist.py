@@ -10,6 +10,7 @@ import sys
 def convert(file_path):
     objlist = []
     objmap = {}
+    term_time = None
     with open(file_path, 'rb') as f:
         depth = 0
         while f.read(1):
@@ -21,15 +22,28 @@ def convert(file_path):
             ctx = unpack('l', f.read(8))[0]
             ctx_addr = unpack('L', f.read(8))[0]
 
-            if obj != -1:
-                objlist.append([obj, addr, size, ctx, ctx_addr,\
-                        time, -1, -1, -1])
-                objmap[addr] = obj
-            else:
+            # Free info
+            if obj == -1:
                 if addr not in objmap:
                     continue
                 obj = objmap[addr]
                 objlist[obj][6:9] = [ctx, ctx_addr, time];
+
+            # Program termination info
+            elif obj == -2:
+                term_time = time
+
+            # Alloc info
+            else:
+                objlist.append([obj, addr, size, ctx, ctx_addr,\
+                        time, -1, -1, -1])
+                objmap[addr] = obj
+
+    if term_time:
+        for obj in objlist:
+            # Unfreed object
+            if obj[8] == -1:
+                obj[8] = term_time
 
     objlist.sort(key = lambda tup: tup[2], reverse = True)
     return objlist

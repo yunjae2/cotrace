@@ -8,6 +8,16 @@ void objtrace_init(void)
 
 void objtrace_term(void)
 {
+	struct timespec ts;
+	unsigned long time;
+	struct obj_data odata;
+
+	/* Write termintation timestamp for unfreed objects */
+	GETTIME(time, ts);
+	OBJ_PACK(odata, -2, 0UL, 0UL,
+			RELTIME(time), 0L, 0UL);
+	TRACE_WRITE(obj_buf, obj_buf_offset, odata, fp_obj);
+
 	if (obj_buf_offset)
 		flush_trace_buf(obj_buf, sizeof(struct obj_data),
 				&obj_buf_offset, fp_obj);

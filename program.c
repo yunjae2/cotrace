@@ -19,7 +19,6 @@ void bar(void)
 	free(ptr);
 	ptr = (int *)calloc(20, sizeof(int));
 	ptr = (int *)realloc(ptr, 30000000 * sizeof(int));
-	free(ptr);
 }
 
 void foo(void)
