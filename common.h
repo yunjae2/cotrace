@@ -1,6 +1,8 @@
 #ifndef _COMMON_H
 #define _COMMON_H
 
+#define _GNU_SOURCE
+#include <dlfcn.h>
 #include <stdio.h>
 #include <time.h>
 
@@ -50,5 +52,6 @@ extern struct ctx_data curr_ctx;
 extern FILE *fp_ctx, *fp_obj;
 
 unsigned long start_time;
+int in_dlsym;
 
 #endif

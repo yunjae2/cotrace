@@ -1,8 +1,6 @@
 #ifndef _OBJTRACE_H
 #define _OBJTRACE_H
 
-#define _GNU_SOURCE
-#include <dlfcn.h>
 #include "common.h"
 
 #define OBJ_PACK(pkg, _obj, _addr, _size, _time, _ctx, _ctx_addr)	{\
@@ -43,7 +41,6 @@ free_t free_fn;
 
 FILE *fp_obj;
 int disable_objtrace;
-int in_dlsym;
 int objid;
 
 int obj_buf_offset;

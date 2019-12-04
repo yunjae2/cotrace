@@ -67,3 +67,50 @@ void __cyg_profile_func_exit(void *this_fn, void *call_site)
 	if (curr_ctx.depth != 0)
 		curr_ctx = TRACE_POP();
 }
+
+void term_ctxs(void)
+{
+	struct timespec ts;
+
+	while (1) {
+		GETRELTIME(curr_ctx.end_time, ts);
+		if (curr_ctx.end_time - curr_ctx.start_time >= CTX_MIN_RUNTIME) {
+			TRACE_WRITE(ctx_buf, ctx_buf_offset, curr_ctx, fp_ctx);
+		}
+
+		// Do not pop when main() ends
+		if (curr_ctx.depth == 0)
+			break;
+
+		curr_ctx = TRACE_POP();
+	}
+
+}
+
+void exit(int status)
+{
+	term_ctxs();
+	cotrace_end();
+
+	if (exit_fn == NULL) {
+		in_dlsym = 1;
+		exit_fn = (exit_t)dlsym(RTLD_NEXT, "exit");
+		in_dlsym = 0;
+	}
+
+	exit_fn(status);
+}
+
+void abort(void)
+{
+	term_ctxs();
+	cotrace_end();
+
+	if (abort_fn == NULL) {
+		in_dlsym = 1;
+		abort_fn = (abort_t)dlsym(RTLD_NEXT, "abort");
+		in_dlsym = 0;
+	}
+
+	abort_fn();
+}

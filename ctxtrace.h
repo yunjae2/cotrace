@@ -17,6 +17,12 @@
 	curr_ctx.depth = _depth;\
 }
 
+typedef void (*exit_t)(int status);
+typedef void (*abort_t)(void);
+void exit(int status) __attribute__ ((no_instrument_function));
+void abort(void) __attribute__ ((no_instrument_function));
+exit_t exit_fn;
+abort_t abort_fn;
 
 void cotrace_begin(void) __attribute__ ((constructor, no_instrument_function));
 void cotrace_end(void) __attribute__ ((destructor, no_instrument_function));
@@ -24,6 +30,7 @@ void __cyg_profile_func_enter(void *this_fn, void *call_site)
 	__attribute__ ((no_instrument_function));
 void __cyg_profile_func_exit(void *this_fn, void *call_site)
 	__attribute__ ((no_instrument_function));
+void term_ctxs(void) __attribute__ ((no_instrument_function));
 
 FILE *fp_ctx;
 long nr_ctx;
